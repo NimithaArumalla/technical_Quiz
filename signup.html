@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>SIGNUP</title>
+        <style>
+            body{
+                background-image: linear-gradient(rgb(203, 228, 255),rgb(244, 190, 244),rgb(203, 223, 245));
+            }
+            .signup
+            {
+                margin:5%;
+                padding:40px;
+                
+            }
+        </style>
+    </head>
+    <body style="text-align: center;">
+        <div class="signup">
+        <form action="signup.php" method="post">
+            <div class="signup">
+            <label for="name">NAME:</label>
+            <input type="text"  id="name" name="name" required><BR><BR>
+            <label for="gender">GENDER:</label><br><BR>
+            <label for="f">FEMALE</label>
+            <input type="radio" id="f" name="gender" required><br>
+            <label for="m">MALE</label>
+            <input type="radio" id="m" name="gender" required><br><br>
+            <label for="number">PHONE NUMBER:</label>
+            <input type="tel" id="number" name="number" required><br><br>
+            <label for="pwd">PASSWORD:</label>
+            <input type="password" id="pwd" name="pwd" required><br><br>
+            <input type="submit" id="submit" name="submit" value="SIGNUP">
+        </form>
+    </div>
+    </body>     
+</html>

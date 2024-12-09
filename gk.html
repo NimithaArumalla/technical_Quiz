@@ -1,0 +1,172 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="1.css">
+  <title>APPTITUDE AND REASONING</title>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>APPTITUDE AN REASONING</h1>
+    <p id="question"></p>
+    <div id="options" class="options">
+    </div>
+    <button id="nextBtn" disabled>Next Question</button>
+    <div class="ans">
+        <h2 id="ans"></h2>
+      </div>
+    <div id="score" class="score-container">
+      <p>Your Score: <span id="scoreValue">0</span></p>
+      <h1 id="less"></h1>
+    </div>
+  </div>
+  <script>
+    const questions = [
+  {
+    question: "Out of all the 2-digit integers between 1 and 100, a 2-digit number has to be selected at random. What is the probability that the selected number is not divisible by 7?",
+    options: ["13/90","12/90","78/90","77/90"],
+    answer: "77/90",
+  },
+  {
+    question: "The probability that a given positive integer lying between 1 and 100 (both inclusive) is NOT divisible by 2, 3 or 5 is ______ .",
+    options: ["0.259", "0.459", "0.325", "0.225"],
+    answer: "0.259",
+  },
+  {
+    question: "Select the corrrect option that will fill the blank and complete the series? AOP,CQR,EST,GUV,______?",
+    options: ["IYZ","HWX","IWX","JWX"],
+    answer: "IWX",
+  },
+  {
+    question: " If “*” is called “+”, “/” is called “*”, “-” is called  “/”, “+” is called “-”. 40/20 – 5 * 10 + 5 = ?",
+
+
+    options: ['170','160','150','none of these'],
+    answer: 'none of these',
+  },
+  {
+    question: "(1015)2 = ?",
+    options: ['1040125','1030225','1050125','1025125'],
+    answer: '1030225',
+  },
+  {
+    question: "Largest five digit number exactly divisible by 39 is:",
+    options: ['99979','99956','99989','99996'],
+    answer: '99996',
+  },
+  {
+    question: "What should be the value of * in 985*865, if number is divisible by 9?",
+    options: ['6','5','4','0'],
+    answer: '4',
+  },
+  {
+    question: "If NOIDA is written as OPJEB, then what will be the code for DELHI?",
+    options: ['EFMAK','EFAMK','EFMIJ','EFMIK'],
+    answer: 'EFMIJ',
+  },
+  {
+    question: ' If PINK is coded as 1691411, then RED will be coded as -',
+    options: ['1963','1854','1853','1954'],
+    answer: '1854',
+  },
+  {
+    question: 'Which of the following is the odd one from the given alternatives?',
+    options: ['Driving','Diving','Swimming','Sailing'],
+    answer: 'Driving',
+  },
+  
+
+];
+
+const questionElement = document.getElementById("question");
+const optionsElement = document.getElementById("options");
+const nextBtn = document.getElementById("nextBtn");
+const scoreElement = document.getElementById("score");
+const scoreValueElement = document.getElementById("scoreValue");
+
+let shuffledQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function loadQuestion() {
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+  questionElement.textContent = currentQuestion.question;
+
+  optionsElement.innerHTML = "";
+  currentQuestion.options.forEach((option, index) => {
+    const optionButton = document.createElement("button");
+    optionButton.textContent = option;
+    optionButton.addEventListener("click", () => checkAnswer(option, currentQuestion.answer, index));
+    optionsElement.appendChild(optionButton);
+  });
+
+  nextBtn.disabled = true;
+  optionsElement.querySelectorAll("button").forEach(button => {
+    button.disabled = false;
+    button.classList.remove("correct");
+  });
+}
+
+function checkAnswer(selectedOption, correctAnswer, selectedIndex) {
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+  const correctOptionIndex = currentQuestion.options.indexOf(correctAnswer);
+  
+  if (selectedOption === correctAnswer) {
+    document.getElementById("ans").textContent="Correct!";
+    score++;
+    updateScore();
+  } else {
+    document.getElementById("ans").textContent="Incorrect. The correct answer is: " + correctAnswer;
+    optionsElement.querySelectorAll("button")[correctOptionIndex].classList.add("correct");
+    optionsElement.querySelectorAll("button")[selectedIndex].classList.add("incorrect");
+  }
+
+  optionsElement.querySelectorAll("button").forEach(button => {
+    button.disabled = true;
+  });
+
+  nextBtn.disabled = false;
+}
+
+function updateScore() {
+  scoreValueElement.textContent = score + " out of " + questions.length;
+}
+function showFinalScore() {
+  questionElement.textContent = "Quiz completed!";
+  optionsElement.innerHTML = "";
+  nextBtn.style.display = "none";
+  scoreElement.style.display = "block";
+  updateScore();
+  if(score<5)
+  {
+      document.getElementById('less').textContent=" 😓REQUIRES MORE PRACTICE";
+    }
+    else{
+      document.getElementById('less').textContent="😁 WELL DONE";
+     // window.open("1.html");
+    }
+}
+
+shuffleArray(questions);
+shuffledQuestions = [...questions];
+
+nextBtn.addEventListener("click", () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < shuffledQuestions.length) {
+    loadQuestion();
+  } else {
+    showFinalScore();
+  }
+});
+loadQuestion();
+
+  </script>
+</body>
+</html>

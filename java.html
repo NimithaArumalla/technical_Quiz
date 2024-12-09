@@ -1,0 +1,174 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="1.css">
+  <title>JAVA</title>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>JAVA</h1>
+    <p id="question"></p>
+    <div id="options" class="options">
+    </div>
+    <button id="nextBtn" disabled>Next Question</button>
+    <div class="ans">
+        <h2 id="ans"></h2>
+      </div>
+    <div id="score" class="score-container">
+      <p>Your Score: <span id="scoreValue">0</span></p>
+      <h1 id="less"></h1>
+    </div>
+  </div>
+  <script>
+    const questions = [
+    {
+      question: "Which of the following option leads to the probability and security of java ?",
+      options: ["Byte code is executed by jm", "The applet makes java code secure and portable,", "Use of exception handling", "Dynamic binding"],
+      answer: "Byte code is executed by jm"
+    },
+    {
+      question: "Which of the following is not a java feature?",
+      options: ["Dynamic", "Architecture neutral", "Use of pointers", "objects-oriented"],
+      answer: "Use of pointers"
+    },
+    {
+      question: 'The \u0021 article referred to as a?',
+      options: ['Unicode escape sequence', 'Octal escape', 'Hexa', 'Line feed'],
+      answer: 'Unicode escape sequence',
+    },
+    {
+      question: '_____ is used to find and fix bugs in the java programs?',
+      options: ['JUM', 'JRE', 'JDK', 'JDB'],
+      answer: 'JDB',
+    },
+    {
+      question: 'what is the return type of hash code() method in object class?',
+      options: [
+        'object',
+        'int',
+        'long',
+        'void',
+      ],
+      answer: 'int',
+    },
+    {
+      question: 'Which of the following tool is used to generate API documentation in HTML format from doc comments in source code?',
+      options: ['javap tool', 'javaw command', 'javadoc command', 'javah command'],
+      answer: 'javadoc command',
+    },
+    {
+        question: 'evaluate the following java expression if x=3,y=5,z=10++z+y-y+z+x++?',
+        options: ['24', '23', '20', '25'],
+        answer: '25',
+    },
+    {
+        question: 'In which process a local variable has the same name as one of the instance variable?',
+        options: ['serialization', 'variable shadowing', 'abstraction', 'multithreading'],
+        answer: 'variable shadowing',
+    },
+    {
+        question: 'Which of these cannot be used for a variable name in java?',
+        options: ['identifier and keyword', 'identifier', 'keyword', 'none'],
+        answer: 'keyword',
+    },
+    {
+        question: 'Which environment variable is used to set the java path?',
+        options: ['MAVEN_PATH', 'JavaPath', 'JAVA', 'JAVA_HOME'],
+        answer: 'JAVA_HOME',
+    },
+    
+  ];
+  
+  const questionElement = document.getElementById("question");
+  const optionsElement = document.getElementById("options");
+  const nextBtn = document.getElementById("nextBtn");
+  const scoreElement = document.getElementById("score");
+  const scoreValueElement = document.getElementById("scoreValue");
+  
+  let shuffledQuestions = [];
+  let currentQuestionIndex = 0;
+  let score = 0;
+  
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+  
+  function loadQuestion() {
+    const currentQuestion = shuffledQuestions[currentQuestionIndex];
+    questionElement.textContent = currentQuestion.question;
+  
+    optionsElement.innerHTML = "";
+    currentQuestion.options.forEach((option, index) => {
+      const optionButton = document.createElement("button");
+      optionButton.textContent = option;
+      optionButton.addEventListener("click", () => checkAnswer(option, currentQuestion.answer, index));
+      optionsElement.appendChild(optionButton);
+    });
+  
+    nextBtn.disabled = true;
+    optionsElement.querySelectorAll("button").forEach(button => {
+      button.disabled = false;
+      button.classList.remove("correct");
+    });
+  }
+  
+  function checkAnswer(selectedOption, correctAnswer, selectedIndex) {
+    const currentQuestion = shuffledQuestions[currentQuestionIndex];
+    const correctOptionIndex = currentQuestion.options.indexOf(correctAnswer);
+    
+    if (selectedOption === correctAnswer) {
+      document.getElementById("ans").textContent="Correct!";
+      score++;
+      updateScore();
+    } else {
+      document.getElementById("ans").textContent="Incorrect. The correct answer is: " + correctAnswer;
+      optionsElement.querySelectorAll("button")[correctOptionIndex].classList.add("correct");
+      optionsElement.querySelectorAll("button")[selectedIndex].classList.add("incorrect");
+    }
+  
+    optionsElement.querySelectorAll("button").forEach(button => {
+      button.disabled = true;
+    });
+  
+    nextBtn.disabled = false;
+  }
+  
+  function updateScore() {
+    scoreValueElement.textContent = score + " out of " + questions.length;
+  }
+  function showFinalScore() {
+    questionElement.textContent = "Quiz completed!";
+    optionsElement.innerHTML = "";
+    nextBtn.style.display = "none";
+    scoreElement.style.display = "block";
+    updateScore();
+    if(score<5)
+    {
+      document.getElementById('less').textContent=" 😓REQUIRES MORE PRACTICE";
+    }
+    else{
+      document.getElementById('less').textContent="😁 WELL DONE";
+     // window.open("1.html");
+    }
+  }
+  
+  shuffleArray(questions);
+  shuffledQuestions = [...questions];
+  
+  nextBtn.addEventListener("click", () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < shuffledQuestions.length) {
+      loadQuestion();
+    } else {
+      showFinalScore();
+    }
+  });
+  
+  loadQuestion();
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="1.css">
+  <title>DATA STRUCTURES</title>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>DATA STRUCTURES</h1>
+    <p id="question"></p>
+    <div id="options" class="options">
+    </div>
+    <button id="nextBtn" disabled>Next Question</button>
+    <div class="ans">
+        <h2 id="ans"></h2>
+      </div>
+    <div id="score" class="score-container">
+      <p>Your Score: <span id="scoreValue">0</span></p>
+      <h1 id="less"></h1>
+    </div>
+  </div>
+  <script>
+    const questions = [
+        {
+          question: "What is the worst case run-time complexity of binary search algorithm?",
+          options: ["O(n^2)","O(n^logn)","O(n^3)","O(n)"],
+          answer: "O(n)",
+        },
+        {
+          question: "push() and pop() functions are found in",
+          options: ["queues","lists","stacks","trees"],
+          answer: "stacks",
+        },
+        {
+          question: 'Minimum number of spanning tree in a connected graph is',
+          options: ["n","0","1","n^2"],
+          answer: '1',
+        },
+        {
+          question: 'Graph traversal is different from a tree traversal, because',
+          options: ["trees are not connected.","graphs may have loops.","trees have root.","None is true as tree is a subset of graph."],
+          answer: 'trees have root.',
+        },
+        {
+          question: 'An adaptive sorting algorithm___',
+          options: ["adapts to new computers","takes advantage of already sorted elements","takes input which is already sorted","none of the above"],
+          answer: 'takes advantage of already sorted elements',
+        },
+        {
+          question: 'Stack is used for',
+          options: ["CPU Resource Allocation","Breadth First Traversal","Recursion","None of the above"],
+          answer:"Recursion",
+        },
+        {
+          question: 'Which of the following has search effeciency of O(1)',
+          options: ["Tree","Heap","Hash Table","Linked-List"],
+          answer: 'Hash Table',
+        },
+        {
+          question: 'Shell sort uses',
+          options:["insertion sort","merge sort","selection sort","quick sort"],
+          answer: 'insertion sort',
+        },
+        {
+          question: ' Which of the following algorithm does not divide the list',
+          options: ["linear search","binary search","merge sort","quick sort"],
+          answer: 'linear search',
+        },
+        {
+          question: 'The prefix form of A-B/ (C * D ^ E) is?',
+          options: ["-A/B*C^DE","A/BC*^DE","ABCD*^DE","-/*^ACBDE"],
+          answer: '-A/B*C^DE',
+        },
+        
+      
+      ];
+      
+      const questionElement = document.getElementById("question");
+      const optionsElement = document.getElementById("options");
+      const nextBtn = document.getElementById("nextBtn");
+      const scoreElement = document.getElementById("score");
+      const scoreValueElement = document.getElementById("scoreValue");
+      
+      let shuffledQuestions = [];
+      let currentQuestionIndex = 0;
+      let score = 0;
+      
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+      
+      function loadQuestion() {
+        const currentQuestion = shuffledQuestions[currentQuestionIndex];
+        questionElement.textContent = currentQuestion.question;
+      
+        optionsElement.innerHTML = "";
+        currentQuestion.options.forEach((option, index) => {
+          const optionButton = document.createElement("button");
+          optionButton.textContent = option;
+          optionButton.addEventListener("click", () => checkAnswer(option, currentQuestion.answer, index));
+          optionsElement.appendChild(optionButton);
+        });
+      
+        nextBtn.disabled = true;
+        optionsElement.querySelectorAll("button").forEach(button => {
+          button.disabled = false;
+          button.classList.remove("correct");
+        });
+      }
+      
+      function checkAnswer(selectedOption, correctAnswer, selectedIndex) {
+        const currentQuestion = shuffledQuestions[currentQuestionIndex];
+        const correctOptionIndex = currentQuestion.options.indexOf(correctAnswer);
+        
+        if (selectedOption === correctAnswer) {
+          document.getElementById("ans").textContent="Correct!";
+          score++;
+          updateScore();
+        } else {
+          document.getElementById("ans").textContent="Incorrect. The correct answer is: " + correctAnswer;
+          optionsElement.querySelectorAll("button")[correctOptionIndex].classList.add("correct");
+          optionsElement.querySelectorAll("button")[selectedIndex].classList.add("incorrect");
+        }
+      
+        optionsElement.querySelectorAll("button").forEach(button => {
+          button.disabled = true;
+        });
+      
+        nextBtn.disabled = false;
+      }
+      
+      function updateScore() {
+        scoreValueElement.textContent = score + " out of " + questions.length;
+      }
+      function showFinalScore() {
+        questionElement.textContent = "Quiz completed!";
+        optionsElement.innerHTML = "";
+        nextBtn.style.display = "none";
+        scoreElement.style.display = "block";
+        updateScore();
+        if(score<5)
+    {
+      document.getElementById('less').textContent=" 😓REQUIRES MORE PRACTICE";
+    }
+    else{
+      document.getElementById('less').textContent="😁 WELL DONE";
+      }
+    }
+      
+      shuffleArray(questions);
+      shuffledQuestions = [...questions];
+      
+      nextBtn.addEventListener("click", () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < shuffledQuestions.length) {
+          loadQuestion();
+        } else {
+          showFinalScore();
+        }
+      });
+      loadQuestion();
+     
+  </script>
+</body>
+</html>

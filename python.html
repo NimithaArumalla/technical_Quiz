@@ -1,0 +1,180 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="1.css">
+  <title>PYTHON</title>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>PYTHON</h1>
+    <p id="question"></p>
+    <div id="options" class="options">
+    </div>
+    <button id="nextBtn" disabled>Next Question</button>
+    <div class="ans">
+        <h2 id="ans"></h2>
+      </div>
+    <div id="score" class="score-container">
+      <p>Your Score: <span id="scoreValue">0</span></p>
+      <h1 id="less"></h1>
+    </div>
+  </div>
+  <script>
+    const questions = [
+  {
+    question: 'who developed python programming language?',
+    options: ["Wick van rossum","Rasmis lardorf ","Guido van rossum","Niere stom"],
+    answer: 'Guido van rossum',
+  },
+  {
+    question: 'What will be the value of following python expression?',
+    options: ["7","2","4","1"],
+    answer: '7',
+  },
+  {
+    question: 'Python supports the creation of anonymous function at runtime, using a construct called_____',
+    options: ["pi","Anonymous","lambda","none"],
+    answer: 'lambda',
+  },
+  {
+    question: 'What is the order of precedence in python?',
+    options: ["Exponential,Parenthesis,Multiplication,Division,Addition,Subtraction","Exponential,Parenthesis,Division,Multiplication,Addition,Subtraction","Parenthesis,Exponential,Multiplication,Division,Addition,Subtraction","Parenthesis,Exponential,Multiplication,Division,Addition,Subtraction"],
+    answer: 'Parenthesis,Exponential,Multiplication,Division,Addition,Subtraction',
+  },
+  {
+    question: 'what is the output of the following python code sinppet if x=1 (x<<2) ?',
+    options: ["4","2","1","8"],
+    answer: '4',
+  },
+  {
+    question: 'what arithematic operator cant be used with strings in python ?',
+    options: ["*","-","+","All"],
+    answer: '-',
+  },
+{
+    question: 'Is it possible to run program without memory ?',
+    options: ["yes","no","error","cant say"],
+    answer: 'yes',
+  },
+{
+    question: 'In hexadecimal number system, E is equivalent to number in decimal ?',
+    options: ["10","14","12","15"],
+    answer: '14',
+  },
+{
+    question: 'what is the max possible length of an identifier in python ?',
+    options: ["79 characters","31","63","None"],
+    answer: 'None',
+  },
+{
+    question: 'what is the between type of function id ?',
+    options: ["int","float","bool","dict"],
+    answer: 'int',
+  },
+{
+    question: 'which module in python standard library parses option received from command line?',
+    options: ["getarg","getopt","main","os"],
+    answer: 'getopt',
+  },
+{
+    question: 'what well be the output of the following python code ===> print(\"abc.DEF\".capitalize())',
+    options: ["Abc.def","abc.def","Abc.Def","ABC.DEF"],
+    answer: 'Abc.Def',
+  },	
+];
+
+const questionElement = document.getElementById("question");
+const optionsElement = document.getElementById("options");
+const nextBtn = document.getElementById("nextBtn");
+const scoreElement = document.getElementById("score");
+const scoreValueElement = document.getElementById("scoreValue");
+
+let shuffledQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function loadQuestion() {
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+  questionElement.textContent = currentQuestion.question;
+
+  optionsElement.innerHTML = "";
+  currentQuestion.options.forEach((option, index) => {
+    const optionButton = document.createElement("button");
+    optionButton.textContent = option;
+    optionButton.addEventListener("click", () => checkAnswer(option, currentQuestion.answer, index));
+    optionsElement.appendChild(optionButton);
+  });
+
+  nextBtn.disabled = true;
+  optionsElement.querySelectorAll("button").forEach(button => {
+    button.disabled = false;
+    button.classLists.remove("correct");
+  });
+}
+
+function checkAnswer(selectedOption, correctAnswer, selectedIndex) {
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+  const correctOptionIndex = currentQuestion.options.indexOf(correctAnswer);
+  
+  if (selectedOption === correctAnswer) {
+    document.getElementById("ans").textContent="Correct!";
+    score++;
+    updateScore();
+  } else {
+    document.getElementById("ans").textContent="Incorrect. The correct answer is: " + correctAnswer;
+    optionsElement.querySelectorAll("button")[correctOptionIndex].classList.add("correct");
+    optionsElement.querySelectorAll("button")[selectedIndex].classList.add("incorrect");
+  }
+
+  optionsElement.querySelectorAll("button").forEach(button => {
+    button.disabled = true;
+  });
+
+  nextBtn.disabled = false;
+}
+
+function updateScore() {
+  scoreValueElement.textContent = score + " out of " + questions.length;
+}
+
+function showFinalScore() {
+  questionElement.textContent = "Quiz completed!";
+  optionsElement.innerHTML = "";
+  nextBtn.style.display = "none";
+  scoreElement.style.display = "block";
+  updateScore();
+  if(score<5)
+    {
+      document.getElementById('less').textContent=" 😓REQUIRES MORE PRACTICE";
+    }
+    else{
+      document.getElementById('less').textContent="😁 WELL DONE";
+     // window.open("1.html");
+    }
+}
+
+shuffleArray(questions);
+shuffledQuestions = [...questions];
+
+nextBtn.addEventListener("click", () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < shuffledQuestions.length) {
+    loadQuestion();
+  } else {
+    showFinalScore();
+  }
+});
+
+loadQuestion();
+
+  </script>
+</body>
+</html>
